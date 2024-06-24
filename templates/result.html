@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+</head>
+<style>
+    #result {
+        background-color: black;
+        /* Couleur de fond noire */
+        color: white;
+        /* Couleur du texte blanc */
+        padding: 10px;
+        /* Espacement interne */
+        max-height: 300px;
+        /* Hauteur maximale pour le scroll */
+        overflow-y: scroll;
+        /* Activer le défilement vertical */
+    }
+</style>
+
+<body>
+    <pre class="result" id="result">{{ .Result }}</pre>
+</body>
+
+</html>
