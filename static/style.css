@@ -1,9 +1,32 @@
 body {
-    text-align: center;
-    background-color: rgba(7, 7, 100, 0.384);
+    background-color: rgba(2, 2, 59, 0.63);
     color: white;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 h1 {
-    color: black
+    height: 100%;
+    margin: 0;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    color: black;
+    font-size: 90px;
+}
+
+.button1 {
+    background: #014c81;
+    color: wheat;
+    border: none;
+    padding: 8px 70px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 15px;
+    transition: background 0.3s ease;
+}
+
+.button1:hover {
+    background: #015896;
 }
