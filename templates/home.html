@@ -9,15 +9,27 @@
 </head>
 
 <body>
-    <h1>
-        <strong>
-            Ascii-Art-Web
-        </strong>
-    </h1>
-    <form action="/generator" method="post" id="ascii-form">
-        <button class="button1" type="submit" id="button1">Enter
-        </button>
-    </form>
+    <div class="container">
+        <div class="title">
+            AscII-Art-Web
+        </div>
+        <form action="/result" method="POST" class="search-form">
+            <div class="search-bar">
+                <textarea name="text" placeholder="Type Something" required></textarea>
+            </div>
+            <div class="generate-button-container">
+                <select class="button1" name="banner">
+                    <option value="standard">Standard</option>
+                    <option value="shadow">Shadwow</option>
+                    <option value="thinkertoy">Thinkertoy</option>
+                    <option value="train">Train</option>
+                </select>
+                <button class="generate-button" type="submit">
+                    Generate
+                </button>
+            </div>
+        </form>
+    </div>
 </body>
 
 </html>

@@ -8,6 +8,10 @@ import (
 	"text/template"
 )
 
+var text string
+var banner string
+var output string
+
 func Home(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles("templates/home.html")
 	if err != nil {
@@ -32,32 +36,19 @@ func Result(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Bad request", http.StatusBadRequest)
 	}
-	text := r.FormValue("text")
-	banner := r.FormValue("banner")
-	result, err := Ascii_Art(text, banner)
+	text = r.FormValue("text")
+	banner = r.FormValue("banner")
+	output, err = Ascii_Art(text, banner)
 	fmt.Println(banner)
 	fmt.Println(text)
 
 	if err != nil {
-		http.Error(w, "gorgkrgri", http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 	w.Header().Set("Content-type", "text/html; charset=utf-8")
 	err = t.Execute(w, map[string]interface{}{
-		"Result": result,
+		"Result": output,
 	})
-	if err != nil {
-		http.Error(w, "Unable to execute template", http.StatusInternalServerError)
-		fmt.Println("Error executing template:", err)
-	}
-}
-func Generator(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("templates/generator.html")
-	if err != nil {
-		http.Error(w, "Unable to load template", http.StatusInternalServerError)
-		fmt.Println("Error parsing template:", err)
-		return
-	}
-	err = t.Execute(w, nil)
 	if err != nil {
 		http.Error(w, "Unable to execute template", http.StatusInternalServerError)
 		fmt.Println("Error executing template:", err)
@@ -103,4 +94,12 @@ func Ascii_Art(text, banner string) (string, error) {
 		// Générer l'art ASCII pour chaque caractère de la ligne
 	}
 	return result.String(), nil
+}
+
+func DownloadFile(w http.ResponseWriter, r *http.Request) {
+	result := []byte(output)
+	name := strings.Split(text, " ")[0]
+	w.Header().Set("Content-Disposition", "attachment; filename=result-"+name+".txt")
+	w.Header().Set("Content-Type", "text/plain")
+	w.Write(result)
 }

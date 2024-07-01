@@ -5,24 +5,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Result</title>
+    <link rel="stylesheet" href="../static/style-result.css">
+
+    <style>
+        .scrollable-div {
+            overflow: auto;
+            scrollbar-color: transparent;
+
+
+            max-width: 100%;
+        }
+
+        #result {
+
+            color: white;
+            padding: 10px;
+            max-height: 300px;
+            overflow-y: scroll;
+        }
+
+        #result::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        #result::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
+        #result::-webkit-scrollbar-thumb {
+            background-color: rgb(59, 58, 58);
+            border-radius: 20px;
+            border: 3px solid transparent;
+            border-right: none;
+            border-left: none;
+        }
+
+        #result::-webkit-scrollbar-corner {
+            background-color: transparent;
+        }
+
+        .form-wrapper {
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .form-wrapper form {
+            margin-right: 10px;
+        }
+
+
+        button i {
+            margin-right: 5px;
+        }
+    </style>
 </head>
-<style>
-    #result {
-        background-color: black;
-        /* Couleur de fond noire */
-        color: white;
-        /* Couleur du texte blanc */
-        padding: 10px;
-        /* Espacement interne */
-        max-height: 300px;
-        /* Hauteur maximale pour le scroll */
-        overflow-y: scroll;
-        /* Activer le défilement vertical */
-    }
-</style>
+
+
 
 <body>
-    <pre class="result" id="result">{{ .Result }}</pre>
+    <pre name="text" id="result">{{ .Result }}</pre>
+    <div class="container">
+        <form method="get" action="/download">
+            <button type="submit" class="generate-button">Download!</button>
+        </form>
+        <form class="back-button" action="/">
+            <button>Back</button>
+        </form>
+    </div>
 </body>
 
 </html>
