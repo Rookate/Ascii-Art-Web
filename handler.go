@@ -13,15 +13,19 @@ var banner string
 var output string
 
 func Home(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+		errorHeader(w, "error 404", http.StatusNotFound)
+		return
+	}
 	t, err := template.ParseFiles("templates/home.html")
 	if err != nil {
-		http.Error(w, "Unable to load template", http.StatusInternalServerError)
+		errorHeader(w, "Unable to load template", http.StatusInternalServerError)
 		fmt.Println("Error parsing template:", err)
 		return
 	}
 	err = t.Execute(w, nil)
 	if err != nil {
-		http.Error(w, "Unable to execute template", http.StatusInternalServerError)
+		errorHeader(w, "Unable to execute template", http.StatusInternalServerError)
 		fmt.Println("Error executing template:", err)
 	}
 }
@@ -29,12 +33,13 @@ func Home(w http.ResponseWriter, r *http.Request) {
 func Result(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles("templates/result.html")
 	if err != nil {
-		http.Error(w, "Unable to load template", http.StatusInternalServerError)
+		errorHeader(w, "Unable to load template", http.StatusInternalServerError)
 		fmt.Println("Error parsing template:", err)
 		return
 	}
 	if r.Method != http.MethodPost {
-		http.Error(w, "Bad request", http.StatusBadRequest)
+		errorHeader(w, "Bad request", http.StatusBadRequest)
+		return
 	}
 	text = r.FormValue("text")
 	banner = r.FormValue("banner")
@@ -43,15 +48,16 @@ func Result(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(text)
 
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		errorHeader(w, err.Error(), http.StatusInternalServerError)
 	}
 	w.Header().Set("Content-type", "text/html; charset=utf-8")
 	err = t.Execute(w, map[string]interface{}{
 		"Result": output,
 	})
 	if err != nil {
-		http.Error(w, "Unable to execute template", http.StatusInternalServerError)
+		errorHeader(w, "Unable to execute template", http.StatusInternalServerError)
 		fmt.Println("Error executing template:", err)
+		return
 	}
 }
 
@@ -102,4 +108,20 @@ func DownloadFile(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Disposition", "attachment; filename=result-"+name+".txt")
 	w.Header().Set("Content-Type", "text/plain")
 	w.Write(result)
+}
+
+func errorHeader(w http.ResponseWriter, msg string, n int) {
+	w.Header().Set("Content-Type", "text/html")
+	t, err := template.ParseFiles("templates/error.html")
+	if err != nil {
+		fmt.Println("Error parsing template:", err)
+		return
+	}
+	err = t.Execute(w, map[string]interface{}{
+		"error_message": msg,
+		"error_code":    n,
+	})
+	if err != nil {
+		fmt.Println("Error executing template:", err)
+	}
 }
